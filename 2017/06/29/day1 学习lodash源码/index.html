@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Pocho&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  <title>
+    
+      Day1  学习Lodash 源码 | Pocho
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+  <script src="/js/gitment.js"></script>
+</head>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Pocho</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Day1  学习Lodash 源码</h2>
+  <p class="post-date">2017-06-29</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body">
+  <article class="post-article">
+    <section class="markdown-content"><p>按照官网上描述的，『A modern JavaScript utility library delivering modularity, performance &amp; extras.』是一个模块化和有着很多扩展功能的javascript库，也就是说它是一种模块化的js库，使用es5写的，也在原生js上扩展了很多的功能，如果说能将lodash的高频函数的全部自己实现一边，那么，js的技术就炉火纯青了，这也是我现在的目标。除了这个，我还准备深入学习node，vue，react及其相关的扩展库，接下来以后每天争取写一篇文章，Pochodaydayup!</p>
+<h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><p><ol></ol></p>
+<li>在浏览器中使用,下载lodash.js文件后，<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script src=&quot;lodash.js&quot;&gt;&lt;/script&gt;</div></pre></td></tr></table></figure><br><br></li>
+
+<li>使用npm：<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm i --save lodash</div></pre></td></tr></table></figure><br><br></li>
+
+<li>在nodejs：<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// Load the full build.</div><div class="line">var _ = require(&apos;lodash&apos;);</div><div class="line">// Load the core build.</div><div class="line">var _ = require(&apos;lodash/core&apos;);</div><div class="line">// Load the FP build for immutable auto-curried iteratee-first data-last methods.</div><div class="line">var fp = require(&apos;lodash/fp&apos;);</div><div class="line"> </div><div class="line">// Load method categories.</div><div class="line">var array = require(&apos;lodash/array&apos;);</div><div class="line">var object = require(&apos;lodash/fp/object&apos;);</div><div class="line"> </div><div class="line">// Cherry-pick methods for smaller browserify/rollup/webpack bundles.</div><div class="line">var at = require(&apos;lodash/at&apos;);</div><div class="line">var curryN = require(&apos;lodash/fp/curryN&apos;);</div></pre></td></tr></table></figure><br><br></li>
+
+<p></p>
+<h1 id="loadshzhon-中的-thunk"><a href="#loadshzhon-中的-thunk" class="headerlink" title="loadshzhon 中的_.thunk()"></a>loadshzhon 中的_.thunk()</h1><p>在loadsh方法里面的调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">_.chunk(array, [size = 1]);</div></pre></td></tr></table></figure>
+<p>作用是将array分割成一组以size大小的数组，如果不能平均的分配，则最后一个数组会是平分剩下的元素。</p>
+<p>比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">_.chunk([&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;], 2);</div><div class="line">// =&gt; [[&apos;a&apos;, &apos;b&apos;], [&apos;c&apos;, &apos;d&apos;]]</div><div class="line"> </div><div class="line">_.chunk([&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;], 3);</div><div class="line">// =&gt; [[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;], [&apos;d&apos;]]</div></pre></td></tr></table></figure>
+<p>当看到这个函数的时候，我想起来es6中的thunk函数，接着去看了关于chunk函数使用:</p>
+<h2 id="es6中的thunk-函数"><a href="#es6中的thunk-函数" class="headerlink" title="es6中的thunk 函数"></a>es6中的thunk 函数</h2><p>es6中的thunk函数是跟Generator生成器相关系的，能自动执行generator函数。</p>
+<p><strong>函数的求值策略</strong></p>
+<p>假设有这样一个函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var x = 1;</div><div class="line">function f(m) &#123;</div><div class="line">	return m * 2;</div><div class="line">&#125;</div><div class="line">f(x +5);</div></pre></td></tr></table></figure>
+<p>上面的函数中，一种是『传值调用』，就是先计算x + 5的值，然后将结果6传入函数。另一种是『传名调用』，在用到它的时候求值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">f(x + 5)</div><div class="line">// =&gt; (x + 5) * 2</div></pre></td></tr></table></figure>
+<p>这两者的区别是，『传值调用』当对参数求值但是又没用到时候，有可能会造成性能损失。比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">function f(a, b = 3) &#123;</div><div class="line">	retrun b;</div><div class="line">&#125;</div><div class="line">f (3 * x * x - 2 + 4 * x);</div></pre></td></tr></table></figure>
+<p>实际上『传名调用』的实现，是首先先将参数放入一个临时的函数中，然后将临时函数中，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">var x = 5;</div><div class="line">function f(m) &#123;</div><div class="line"> 	return m + 3;</div><div class="line">&#125;</div><div class="line"></div><div class="line">f (x + 5);</div><div class="line">//等同于</div><div class="line"></div><div class="line">var thunk = function () &#123;</div><div class="line">	return x + 5;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function f(thunk) &#123;</div><div class="line">	return thunk() + 3;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>thunk就是替代『传名调用』的一种实现方式。</p>
+<p>##js中的thunk函数</p>
+<p>js中的函数参数是传值调用的，也就是说js中thunk函数不是替换的函数参数表达式，而是多参数的函数，将其替换成值<strong>只接受回调函数</strong>作为<strong>函数参数</strong>的单参数函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">//正常写的readFile(多参数)</div><div class="line">fs.readFile(fileName, callback);</div><div class="line"></div><div class="line">//thunk版本的readFile</div><div class="line"></div><div class="line">var Thunk = function(fileName) &#123;</div><div class="line">	return function (callback) &#123;</div><div class="line">		fs.readfile(fileName, callback);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">--</div><div class="line">var readFileThunk = Thunk (filename);</div><div class="line">readFileThunk(callback);</div></pre></td></tr></table></figure>
+<p>其实看到这里，有一种更为通用类似的方法，就是函数科里化，将函数的多参数改成单参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">function add(a, b, c, d) &#123;</div><div class="line">	return a + b + c + d;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//使用递归调用</div><div class="line"></div><div class="line">function add (seed) &#123;</div><div class="line">	return retVal (later) &#123;</div><div class="line">		return add (seed + later);</div><div class="line">	&#125;</div><div class="line">	retVal.toString = function () &#123;</div><div class="line">		return seed;</div><div class="line">	&#125;</div><div class="line">	return retVal;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//可以改变为：</div><div class="line">add(a)(b)(c)(d).toString();</div></pre></td></tr></table></figure>
+<p>科里化还有很多种情况，等以后会专门开一篇文章来写。再说chunk函数，任何函数都可以转换成thunk函数的形式，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">const thunk = function (fn) &#123;</div><div class="line">	return function (...arg) &#123;</div><div class="line">		return function (callback) &#123;</div><div class="line">			return fn.call(this, ...arg, callback);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//下面是一个例子</div><div class="line"></div><div class="line">function f(a, cb) &#123;</div><div class="line">  cb(a);</div><div class="line">&#125;</div><div class="line">const ft = Thunk(f);</div><div class="line"></div><div class="line">ft(1)(console.log) // 1</div></pre></td></tr></table></figure>
+<p>额，为什么要提到es6中的thunk函数呢，就是突然想到而已，嘻嘻。</p>
+<p>接下来看看lodash的源码，_.thunk();</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">function chunk(array, size, guard) &#123;</div><div class="line">      if ((guard ? isIterateeCall(array, size, guard) : size === undefined)) &#123;</div><div class="line">        size = 1;</div><div class="line">      &#125; else &#123;</div><div class="line">        size = nativeMax(toInteger(size), 0);//取size和0的最大值</div><div class="line">      &#125;</div><div class="line">      var length = array == null ? 0 : array.length;//这里进行了有无array的判断，如果是我来写，我肯定会忽略掉；</div><div class="line">      if (!length || size &lt; 1) &#123;</div><div class="line">        return [];//当length没有或者输入的size小于1，则返回一个空的数组</div><div class="line">      &#125;</div><div class="line">      //正片开始</div><div class="line">      var index = 0,</div><div class="line">          resIndex = 0,</div><div class="line">          result = Array(nativeCeil(length / size));//向下取整并且是一个数组，长度为length/size</div><div class="line"></div><div class="line">      while (index &lt; length) &#123;</div><div class="line">        result[resIndex++] = baseSlice(array, index, (index += size));//baseSlice这个函数肯定对于超过数组长度时有处理。</div><div class="line">      &#125;</div><div class="line">      return result;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>从上述的源码可以看出，一半的源码都是对各种情况进行考虑，当程序员就是要考虑到各种情况。</p>
+<h1 id="compact-array"><a href="#compact-array" class="headerlink" title="_.compact(array)"></a>_.compact(array)</h1><p>返回一个新的去除掉所有假值的数组，假值包括false,null,0,””,undefind,NaN.<br>比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">_.compact([1, 3, &apos;&apos;, false, null, 4, 0])</div><div class="line">//=&gt;[1, 3, 4]</div></pre></td></tr></table></figure>
+<p>源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function compact(array) &#123;</div><div class="line">      var index = -1,</div><div class="line">          length = array == null ? 0 : array.length,</div><div class="line">          resIndex = 0,</div><div class="line">          result = [];[</div><div class="line">      while (++index &lt; length) &#123;</div><div class="line">        var value = array[index];</div><div class="line">        if (value) &#123;</div><div class="line">          result[resIndex++] = value;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">      return result;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>上面的index不是很懂设置成-1和0有什么区别，换成index++是一样的。</p>
+<h1 id="concat-array-values"><a href="#concat-array-values" class="headerlink" title="_.concat(array, [values])"></a>_.concat(array, [values])</h1><p>创造出一个新的数组 链接array和[values]。</p>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var array = [1];</div><div class="line">var other = _.concat(array, 2, [3], [[4]]);</div><div class="line"></div><div class="line">console.log(other);</div><div class="line">//=&gt;[1,2,3,[4]]</div><div class="line"></div><div class="line">console.log(array);</div><div class="line">//=&gt;[1]</div></pre></td></tr></table></figure>
+<p>就是能把后面的数组给拍平，源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function concat() &#123;</div><div class="line">      var length = arguments.length;</div><div class="line">      if (!length) &#123;</div><div class="line">        return [];</div><div class="line">      &#125;</div><div class="line">      var args = Array(length - 1),</div><div class="line">          array = arguments[0],</div><div class="line">          index = length;</div><div class="line"></div><div class="line">      while (index--) &#123;</div><div class="line">        args[index - 1] = arguments[index];//从后往前将元素加进去args，就是除第一个array的。</div><div class="line">      &#125;</div><div class="line">      return arrayPush(isArray(array) ? copyArray(array) : [array], baseFlatten(args, 1));</div></pre></td></tr></table></figure>
+<p>我们看到，其中有三个函数，一个是arrayPush，语义上能理解，具体跟原生push有什么区别呢，可以看下arrayPush的源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function arrayPush(array, values) &#123;</div><div class="line">    var index = -1,</div><div class="line">        length = values.length,</div><div class="line">        offset = array.length;</div><div class="line"></div><div class="line">    while (++index &lt; length) &#123;</div><div class="line">      array[offset + index] = values[index];//实现就是把原来array的长度作为当前的，然后加上index，把values[index]赋值给他，注意values是数组形式的，而且是一为数组。</div><div class="line">    &#125;</div><div class="line">    return array;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>简单的，然后再看下copyArray：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function copyArray(source, array) &#123;</div><div class="line">      var index = -1,</div><div class="line">          length = source.length;</div><div class="line"></div><div class="line">      array || (array = Array(length));</div><div class="line">      while (++index &lt; length) &#123;</div><div class="line">        array[index] = source[index];</div><div class="line">      &#125;</div><div class="line">      return array;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>相当于就是把array复制了一边，然后看下最难的baseFlatten(把数组拍平):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">function baseFlatten(array, depth, predicate, isStrict, result) &#123;</div><div class="line">      var index = -1,</div><div class="line">          length = array.length;</div><div class="line"></div><div class="line">      predicate || (predicate = isFlattenable);</div><div class="line">      result || (result = []);</div><div class="line"></div><div class="line">      while (++index &lt; length) &#123;</div><div class="line">        var value = array[index];//如果按照上述的例子，第一个数是2话，取出的value为undefind。</div><div class="line">        if (depth &gt; 0 &amp;&amp; predicate(value)) &#123; //判断是不是可以拍平的value，这里就分道扬镳了。</div><div class="line">          if (depth &gt; 1) &#123;</div><div class="line">            // Recursively flatten arrays (susceptible to call stack limits).</div><div class="line">            baseFlatten(value, depth - 1, predicate, isStrict, result);//使用递归的思想，注意的一点是当array不是数组时的处理情况，直接就执行result[result.length] = value;</div><div class="line">          &#125; else &#123;</div><div class="line">            arrayPush(result, value);//当depth为1时，只是将value数组剥去一层，具体见arrayPush的源码。</div><div class="line">          &#125;</div><div class="line">        &#125; else if (!isStrict) &#123;</div><div class="line">          result[result.length] = value;//这里就直接处理元素不是数组的情况。</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">      return result;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这些函数主要是针对数组的，有很多小函数都是平时面试的知识点，除了能实现功能以外，还考虑了很多的情况，不过在es6就只直接在参数里进行默认赋值了。这次的函数有<em>.thunk(arr, size=[1]);</em>.compact(arr);_.concat(arr, [values]);</p>
+</section>
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <span class="tag-code">lodash</span>
+
+  <span class="tag-code">Javascript</span>
+
+      </div>
+    
+    <div class="money-like">
+      <div class="reward-btn">
+        赏
+        <span class="money-code">
+          <span class="alipay-code">
+            <div class="code-image"></div>
+            <b>使用支付宝打赏</b>
+          </span>
+          <span class="wechat-code">
+            <div class="code-image"></div>
+            <b>使用微信打赏</b>
+          </span>
+        </span>
+      </div>
+      <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+    </div>
+    <div class="qrcode">
+      <canvas id="share-qrcode"></canvas>
+      <p class="notice">扫描二维码，分享此文章</p>
+    </div>
+    <div id="comments"></div>
+  </article>
+</main>
+
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2017/06/29/day1 学习lodash源码/';
+    $('#article-banner').geopattern(url)
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://yanm1ng.cn/error-img.png') 
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "yanm1ng";
+    if (gitmentConfig != "undefined") {
+      var gitment = new Gitment({
+        owner: "yanm1ng",
+        repo: "yanm1ng.github.io",
+        oauth: {
+          client_id: "0f87e490e00ee3fd87ef",
+          client_secret: "4a9d2b148e7971c2201ad12131ce8bf8159ccd2e"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2017 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/Pochodaydayup">Pocho</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine == 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
