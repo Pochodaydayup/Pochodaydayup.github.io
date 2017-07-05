@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Pocho&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  <title>
+    
+      Day3 学习vuex | Pocho
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+  <script src="/js/gitment.js"></script>
+</head>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Pocho</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Day3 学习vuex</h2>
+  <p class="post-date">2017-07-05</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body">
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="Vuex"><a href="#Vuex" class="headerlink" title="Vuex"></a>Vuex</h1><p>之前在学校的时候学习过vue，并且用它做了两个项目，分别是购物车功能和问卷调查功能，当时写的时候，没有考虑过组件化和使用Vuex来进行数据的传递，所以现在，想在原有vue的基础上，进一步的学习vuex（其实最近一个月我都没有碰vue，我那时可是在学react和redux喂！）。</p>
+<h2 id="Vuex是什么"><a href="#Vuex是什么" class="headerlink" title="Vuex是什么"></a>Vuex是什么</h2><p>Vuex 是一个专为 Vue.js 应用程序开发的<strong>状态管理模式</strong>。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。这就其实跟redux一样的，存储在Vuex或者redux里面的状态，父组件和子组件都可以去到，父组件可以使用store.state.xxx,字组件可以通过this.$store.state.xxx，但是你不能随便改变Vuex里面state，你需要通过显式的提交commit来改变state的值，react也一样，redux是使用dispach来显示修改。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ol><br><br><li>npm: <code>npm install vuex --save</code></li><br><br><li>yarn: <code>yarn add vuex</code></li><br><br></ol>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>在模块化的构建系统中，需要显示应用：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></div><div class="line"><span class="keyword">import</span> Vuex <span class="keyword">from</span> <span class="string">'vuex'</span></div><div class="line">Vue.use(Vuex);</div></pre></td></tr></table></figure>
+<p>当使用全局script标签引用vuex时，不需要上述操作。</p>
+<h2 id="一个简单实例"><a href="#一个简单实例" class="headerlink" title="一个简单实例"></a>一个简单实例</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</div><div class="line">  <span class="attr">state</span>: &#123;</div><div class="line">  	<span class="attr">count</span>: <span class="number">0</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">mutations</span>: &#123;</div><div class="line">    increment (state) &#123;</div><div class="line">      state.count++</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>通过<code>store.state.count</code>取得count值，通过<code>store.commit(&#39;increment&#39;)</code>来显式提交更改。现在<code>count</code>的值为1了。</p>
+<h2 id="state"><a href="#state" class="headerlink" title="state"></a>state</h2><h3 id="单一状态树"><a href="#单一状态树" class="headerlink" title="单一状态树"></a>单一状态树</h3><p>Vuex 使用 <strong>单一状态树</strong> —— 是的，用一个对象就包含了全部的应用层级状态。至此它便作为一个『唯一数据源(<a href="https://en.wikipedia.org/wiki/Single_source_of_truth" target="_blank" rel="external">SSOT</a>)』而存在。这也意味着，<strong>每个应用</strong>将仅仅包含<strong>一个 store 实例</strong>。单一状态树让我们能够直接地定位任一特定的状态片段，在调试的过程中也能轻易地取得整个当前应用状态的快照。</p>
+<h3 id="使用mapstate函数"><a href="#使用mapstate函数" class="headerlink" title="使用mapstate函数"></a>使用<code>mapstate</code>函数</h3><p>比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 在单独构建的版本中辅助函数为 Vuex.mapState</span></div><div class="line"><span class="keyword">import</span> &#123; mapState &#125; <span class="keyword">from</span> <span class="string">'vuex'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  computed: mapState(&#123;</div><div class="line">    <span class="comment">// 箭头函数可使代码更简练</span></div><div class="line">    count: <span class="function"><span class="params">state</span> =&gt;</span> state.count,</div><div class="line"></div><div class="line">    <span class="comment">// 传字符串参数 'count' 等同于 `state =&gt; state.count`</span></div><div class="line">    countAlias: <span class="string">'count'</span>,</div><div class="line"></div><div class="line">    <span class="comment">// 为了能够使用 `this` 获取局部状态，必须使用常规函数</span></div><div class="line">    countPlusLocalState (state) &#123;</div><div class="line">      <span class="keyword">return</span> state.count + <span class="keyword">this</span>.localCount</div><div class="line">    &#125;</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当映射的计算属性的名称与 state 的子节点名称相同时，我们也可以给 <code>mapState</code> 传一个字符串数组。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">computed: mapState([</div><div class="line">  <span class="comment">// 映射 this.count 为 store.state.count</span></div><div class="line">  <span class="string">'count'</span></div><div class="line">])</div></pre></td></tr></table></figure>
+<p><code>mapState</code> 函数返回的是一个对象。我们如何将它与局部计算属性混合使用呢？通常，我们需要使用一个工具函数将多个对象合并为一个，以使我们可以将最终对象传给 <code>computed</code> 属性。但是自从有了<a href="https://github.com/sebmarkbage/ecmascript-rest-spread" target="_blank" rel="external">对象展开运算符</a>（现处于 ECMASCript 提案 stage-3 阶段），我们可以极大地简化写法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">computed: &#123;</div><div class="line">  localComputed () &#123; <span class="comment">/* ... */</span> &#125;,</div><div class="line">  <span class="comment">// 使用对象展开运算符将此对象混入到外部对象中</span></div><div class="line">  ...mapState(&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="getters"><a href="#getters" class="headerlink" title="getters"></a>getters</h2><p>有时候我们需要从 store 中的 state 中派生出一些状态，例如对列表进行过滤并计数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">computed: &#123;</div><div class="line">  doneTodosCount () &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.$store.state.todos.filter(<span class="function"><span class="params">todo</span> =&gt;</span> todo.done).length</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果只是某个组件需要，那么可以这样写在单独的组件中，但是的话，如果是某几个组件需要或者很多个组件需要，这样一个一个写computed属性就很麻烦，Vuex允许我们在store中定义getters对象，state作为getters第一个参数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</div><div class="line">  <span class="attr">state</span>: &#123;</div><div class="line">    <span class="attr">todos</span>: [</div><div class="line">      &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">text</span>: <span class="string">'...'</span>, <span class="attr">done</span>: <span class="literal">true</span> &#125;,</div><div class="line">      &#123; <span class="attr">id</span>: <span class="number">2</span>, <span class="attr">text</span>: <span class="string">'...'</span>, <span class="attr">done</span>: <span class="literal">false</span> &#125;</div><div class="line">    ]</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">getters</span>: &#123;</div><div class="line">    <span class="attr">doneTodos</span>: <span class="function"><span class="params">state</span> =&gt;</span> &#123;</div><div class="line">      <span class="keyword">return</span> state.todos.filter(<span class="function"><span class="params">todo</span> =&gt;</span> todo.done)</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">doneTodosCount</span>: <span class="function">(<span class="params">state, getters</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">return</span> getters.doneTodos.length <span class="comment">// 这里的getters就是前面定义的getters对象</span></div><div class="line">  &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>Getters 会暴露为 <code>store.getters</code> 对象：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">store.getters.doneTodos <span class="comment">// -&gt; [&#123; id: 1, text: '...', done: true &#125;]</span></div></pre></td></tr></table></figure>
+<p>Getters 也可以接受其他 getters 作为第二个参数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">getters: &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  doneTodosCount: <span class="function">(<span class="params">state, getters</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">return</span> getters.doneTodos.length <span class="comment">// 这里的getters就是前面定义的getters对象</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们可以很容易地在任何组件中使用它：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">computed: &#123;</div><div class="line">  doneTodosCount () &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.$store.getters.doneTodosCount <span class="comment">// 1</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="mapGetters辅助函数"><a href="#mapGetters辅助函数" class="headerlink" title="mapGetters辅助函数"></a>mapGetters辅助函数</h3><p><code>mapGetters</code> 辅助函数仅仅是将 store 中的 getters 映射到局部计算属性：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; mapGetters &#125; <span class="keyword">from</span> <span class="string">'vuex'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  computed: &#123;</div><div class="line">  <span class="comment">// 使用对象展开运算符将 getters 混入 computed 对象中</span></div><div class="line">    ...mapGetters([</div><div class="line">      <span class="string">'doneTodosCount'</span>,<span class="comment">//=&gt;doneTodosCount() &#123;return this.$store.getters.donTodosCount&#125;</span></div><div class="line">      <span class="string">'anotherGetter'</span>,</div><div class="line">      <span class="comment">// ...</span></div><div class="line">    ])</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果你想将一个 getter 属性另取一个名字，使用对象形式：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mapGetters(&#123;</div><div class="line">  <span class="comment">// 映射 this.doneCount 为 store.getters.doneTodosCount</span></div><div class="line">  doneCount: <span class="string">'doneTodosCount'</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h2 id="mutations"><a href="#mutations" class="headerlink" title="mutations"></a>mutations</h2><p>更改 Vuex 的 store 中的状态的唯一方法是提交 mutation。Vuex 中的 mutations 非常类似于事件：每个 mutation 都有一个字符串的 <strong>事件类型 (type)</strong> 和 一个 <strong>回调函数 (handler)</strong>。这个回调函数就是我们实际进行状态更改的地方，并且它会接受 state 作为第一个参数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</div><div class="line">  <span class="attr">state</span>: &#123;</div><div class="line">    <span class="attr">count</span>: <span class="number">1</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">mutations</span>: &#123;</div><div class="line">    increment (state) &#123;</div><div class="line">      <span class="comment">// 变更状态</span></div><div class="line">      state.count++</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>调用：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">store.commit(<span class="string">'increment'</span>)</div></pre></td></tr></table></figure>
+<h2 id="提交额外参数"><a href="#提交额外参数" class="headerlink" title="提交额外参数"></a>提交额外参数</h2><p>你可以向 <code>store.commit</code> 传入额外的参数，即 mutation 的 <strong>载荷（payload）</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ...</span></div><div class="line">mutations: &#123;</div><div class="line">  increment (state, n) &#123;</div><div class="line">    state.count += n</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">store.commit(<span class="string">'increment'</span>, <span class="number">10</span>)</div></pre></td></tr></table></figure>
+<p>大多数情况下，payload应该为一个对象，这样可以包含多个字段，并且可读性更好：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ...</span></div><div class="line">mutations: &#123;</div><div class="line">  increment (state, payload) &#123;</div><div class="line">    state.count += payload.amount</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">store.commit(<span class="string">'increment'</span>, &#123;</div><div class="line">  <span class="attr">amount</span>: <span class="number">10</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>还可以提交整个对象：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">mutations: &#123;</div><div class="line">  increment (state, payload) &#123;</div><div class="line">    state.count += payload.amount</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">	</div><div class="line">store.commit(&#123;</div><div class="line">  <span class="attr">type</span>: <span class="string">'increment'</span>,<span class="comment">//通过type指定提交类型</span></div><div class="line">  amount: <span class="number">10</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h2 id="在组件提交Mutations"><a href="#在组件提交Mutations" class="headerlink" title="在组件提交Mutations"></a>在组件提交Mutations</h2><p>你可以在组件中使用 <code>this.$store.commit(&#39;xxx&#39;)</code> 提交 mutation，或者使用 <code>mapMutations</code> 辅助函数将组件中的 methods 映射为 <code>store.commit</code> 调用（需要在根节点注入 <code>store</code>）。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; mapMutations &#125; <span class="keyword">from</span> <span class="string">'vuex'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  methods: &#123;</div><div class="line">    ...mapMutations([</div><div class="line">      <span class="string">'increment'</span> <span class="comment">// 映射 this.increment() 为 this.$store.commit('increment')</span></div><div class="line">    ]),</div><div class="line">    ...mapMutations(&#123;</div><div class="line">      <span class="attr">add</span>: <span class="string">'increment'</span> <span class="comment">// 映射 this.add() 为 this.$store.commit('increment')</span></div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="mutation-必须是同步函数"><a href="#mutation-必须是同步函数" class="headerlink" title="mutation 必须是同步函数"></a>mutation 必须是同步函数</h3><p>一条重要的原则就是要记住<strong>mutation 必须是同步函数</strong>。在 mutation 中混合异步调用会导致你的程序很难调试。例如，当你能调用了两个包含异步回调的 mutation 来改变状态，你怎么知道什么时候回调和哪个先回调呢？这就是为什么我们要区分这两个概念。在 Vuex 中，<strong>mutation 都是同步事务</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">store.commit(<span class="string">'increment'</span>)</div><div class="line"><span class="comment">// 任何由 "increment" 导致的状态变更都应该在此刻完成。</span></div></pre></td></tr></table></figure>
+<h2 id="Actions–处理异步操作"><a href="#Actions–处理异步操作" class="headerlink" title="Actions–处理异步操作"></a>Actions–处理异步操作</h2><p>Action类似于mutation，不同在于：</p>
+<ul><br><br><li>Action 提交的是 mutation，而不是直接变更状态</li><br><br><li>Action 可以包含任意异步操作。</li><br><br></ul>
+
+<p>比如注册一个简单的action：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</div><div class="line">  <span class="attr">state</span>: &#123;</div><div class="line">    <span class="attr">count</span>: <span class="number">0</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">mutations</span>: &#123; </div><div class="line">    increment (state) &#123;</div><div class="line">      state.count++</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">actions</span>: &#123;</div><div class="line">    increment (context) &#123;</div><div class="line">      context.commit(<span class="string">'increment'</span>)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>利用async和await可以更加简单的组合action：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">actions: &#123;</div><div class="line">  <span class="keyword">async</span> actionA (&#123; commit &#125;) &#123;</div><div class="line">    commit(<span class="string">'gotData'</span>, <span class="keyword">await</span> getData())</div><div class="line">  &#125;,</div><div class="line">  <span class="keyword">async</span> actionB (&#123; dispatch, commit &#125;) &#123;</div><div class="line">    <span class="keyword">await</span> dispatch(<span class="string">'actionA'</span>) <span class="comment">// 等待 actionA 完成</span></div><div class="line">    commit(<span class="string">'gotOtherData'</span>, <span class="keyword">await</span> getOtherData())</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>未完待续。。。。</p>
+</section>
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <span class="tag-code">vuex</span>
+
+      </div>
+    
+    <div class="money-like">
+      <div class="reward-btn">
+        赏
+        <span class="money-code">
+          <span class="alipay-code">
+            <div class="code-image"></div>
+            <b>使用支付宝打赏</b>
+          </span>
+          <span class="wechat-code">
+            <div class="code-image"></div>
+            <b>使用微信打赏</b>
+          </span>
+        </span>
+      </div>
+      <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+    </div>
+    <div class="qrcode">
+      <canvas id="share-qrcode"></canvas>
+      <p class="notice">扫描二维码，分享此文章</p>
+    </div>
+    <div id="comments"></div>
+  </article>
+</main>
+
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2017/07/05/day3/';
+    $('#article-banner').geopattern(url)
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://yanm1ng.cn/error-img.png') 
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "Pochodaydayup";
+    if (gitmentConfig != "undefined") {
+      var gitment = new Gitment({
+        owner: "Pochodaydayup",
+        repo: "Pochodaydayup.github.io",
+        oauth: {
+          client_id: "9ee53d627006bebc15a9",
+          client_secret: "aacd2612b0fc3d86833381e668cdcbe992efe906"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2017 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/Pochodaydayup">Pocho</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine == 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
