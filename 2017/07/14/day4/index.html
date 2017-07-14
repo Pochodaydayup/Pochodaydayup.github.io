@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Pocho&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  <title>
+    
+      Day4 总结第一个项目 | Pocho
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+  <script src="/js/gitment.js"></script>
+</head>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Pocho</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Day4 总结第一个项目</h2>
+  <p class="post-date">2017-07-14</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body">
+  <article class="post-article">
+    <section class="markdown-content"><p>   我写这个项目写了大概一个星期，，，完全是从对公司业务不熟悉的情况下写的，当时大佬给我搭好框架和写好和后台API后，我就开始撸了。</p>
+<p>  在上次的博客上写过，在接触这个项目以前，是用vue写过两个项目，但是都是没有使用组件化和vuex，直接是用的html里引入vue的方法，没办法，简单嘛，当时如果说叫我看什么vuex，什么webpack，什么npm等等，就是一脸懵逼。</p>
+<h1 id="任务概要"><a href="#任务概要" class="headerlink" title="任务概要"></a>任务概要</h1><ol>
+<li><p>首先是页面的header，之前说过是组件化的，那么肯定header和footer共用，这是header的的截图：</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fhjmfilw0mj30sw04eaa6.jpg" alt="">可以看到，本身是有5个步骤，可以想到在vuex里定义了一个step，各个组件通过step来进行相应的操作。然后呢，你要想怎么用css把线段给表示出来，我们可以分解来看，首先在准备工作下面是一根长横线，然后是个上半圆，然后一根短横线，然后又是下半圆，接着循环。想到用什么布局方式没有？个人感觉用flex最好布局，利用好<code>align-items</code>，<code>justify-content</code>，<code>align-self</code>真的能轻松的完成大多数的布局。</p>
+</li>
+<li><p>然后是footer，这个简单，就是两个按钮，上一步和下一步，很简单想到，点击下一步：<code>this.$store.commit(&#39;increment&#39;)</code>使得step的值加一，上一步减一，但是要考虑情况是当step为1的时候，上一步的按钮是disable的，当为5的时候，下一步的按钮是disable的。</p>
+</li>
+<li><p>最后是main组件，这个最终大头：</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fhjmur8mhgj30w50fsjs9.jpg" alt=""></p>
+<p>乍看很简单，不就是几个输入框嘛，其实里面逻辑很复杂，有中英文切换，在这里用到了<code>vue-i18n</code>这个插件，通过编写<code>EN.json和CN.json</code>的方式，来实现语言切换。然后是网络，这个要请求到后台的，选择自动则前三个输入框不能够输入。你还要对输入框进行输入验证，提示错误等等等。</p>
+</li>
+<li><p>到了第二步就是如图：</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fhjqy6463sj30sl0eq3yz.jpg" alt=""></p>
+<p>最麻烦的其实是树形组件，你要把后台返回的数据重写成tree类似的数据格式，然后其实现成的有组件，这次使用到了element的组件，不得不说element的组件真是好用，本来就是用vue写的，然后npm下个直接使用就好，无缝连接。</p>
+</li>
+<li><p>第三步和第四步就不说了，最主要是逻辑控制好，考虑到各种情况，防xss是很重要的。</p>
+</li>
+<li><p>接下来就是附上我的最终目录：</p>
+</li>
+<li><p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fhjr5odh80j30780ihwfb.jpg" alt=""></p>
+</li>
+</ol>
+</section>
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <span class="tag-code">vuex</span>
+
+  <span class="tag-code">vue</span>
+
+      </div>
+    
+    <div class="money-like">
+      <div class="reward-btn">
+        赏
+        <span class="money-code">
+          <span class="alipay-code">
+            <div class="code-image"></div>
+            <b>使用支付宝打赏</b>
+          </span>
+          <span class="wechat-code">
+            <div class="code-image"></div>
+            <b>使用微信打赏</b>
+          </span>
+        </span>
+      </div>
+      <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+    </div>
+    <div class="qrcode">
+      <canvas id="share-qrcode"></canvas>
+      <p class="notice">扫描二维码，分享此文章</p>
+    </div>
+    <div id="comments"></div>
+  </article>
+</main>
+
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2017/07/14/day4/';
+    $('#article-banner').geopattern(url)
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://yanm1ng.cn/error-img.png') 
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "Pochodaydayup";
+    if (gitmentConfig != "undefined") {
+      var gitment = new Gitment({
+        owner: "Pochodaydayup",
+        repo: "Pochodaydayup.github.io",
+        oauth: {
+          client_id: "9ee53d627006bebc15a9",
+          client_secret: "aacd2612b0fc3d86833381e668cdcbe992efe906"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2017 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/Pochodaydayup">Pocho</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine == 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
