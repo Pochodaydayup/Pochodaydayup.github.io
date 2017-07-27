@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Pocho&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  <title>
+    
+      Day5 事件驱动 异步任务 Event Loop 进程 线程 | Pocho
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+  <script src="/js/gitment.js"></script>
+</head>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Pocho</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Day5 事件驱动 异步任务 Event Loop 进程 线程</h2>
+  <p class="post-date">2017-07-27</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body">
+  <article class="post-article">
+    <section class="markdown-content"><p>  最近在看nodejs，讲的最多的就是它的事件轮询和异步IO。那么什么是事件轮询呢，这就要从浏览器端说起。</p>
+<p>  我们都知道js是异步执行的，比如最常见的就是Ajax，那么了解js的执行原理是最为重要的(说实话，我看了差不多3遍，每次看就会有新的发现)。js在浏览器环境中可以分为执行栈和任务队列，我所说的js单线程，就是在执行栈中执行的，将同步代码放入到执行栈中执行，是一个先进先出的结构，而异步代码则会被挂起，直到完成了异步任务，就会在任务队列中放置一个事件，先放进去的事件先执行。当执行栈的任务都做完之后，才会去检查任务队列中的任务，如果正好有某个异步任务完成发生的事件，那么就执行该事件所对应的回调函数，然后执行栈的任务又完成以后，又会去查询任务队列的事件，如此循环，就相当于是事件循环(Event Loop)。下面有一张图可以完全的表示出来：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fhyjq94p9zj30l50id40d.jpg" alt=""></p>
+<p>我们可以看到，像一些click等等事件操作，也会放到任务队列里面。</p>
+<p>  再比如下面一段代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$.ajax(<span class="string">'data.json'</span>, (data) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'1'</span>);</div><div class="line">&#125;)</div><div class="line">setTimeOut(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'3'</span>)</div><div class="line">&#125;, <span class="number">0</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'2'</span>);</div><div class="line">输出什么？</div><div class="line"></div><div class="line">实际上输出的是： </div><div class="line"><span class="number">2</span></div><div class="line"><span class="number">3</span></div><div class="line"><span class="number">1</span></div></pre></td></tr></table></figure>
+<p>  为什么上面的代码不是输出1 3 2？，至少也是3 2 1啊，要知道setTimeOut是将任务放到最近的一次事件查询来执行的，所以当执行栈的任务即<code>console.log(&#39;2&#39;)</code>执行完后，会去查询任务队列中的代码，即第一个是<code>setTimeOut</code>，第二个才是<code>ajax</code>    。</p>
+<p>  nodejs中，主要是http和IO操作，这两货都是异步IO，不想其他的语言一样是同步执行的，所以当有这两操作时，可以将这两任务挂起，让后台完成，并且可以立马执行下面的任务。当挂起的任务有了结果，就会向任务队列发送一个事件，那么就会执行对应的回调函数。</p>
+<p>  其他语言写的后台，代码是同步的，遇到IO操作时，会阻碍后面的代码执行。为了不让后面的代码被堵塞，这时就需要标题所说的线程和进程。为了处理并发的程序，可以多开几个进程。</p>
+<p>  什么是进程？进程打个比方说相当于一个工厂里的车间，当然工厂里会有很多的车间，一个进程只执行一个任务。</p>
+<p>  什么是线程？线程就相当于车间下面的工人们，每个线程可以协作完成一个任务，但是由车间会有很多的作业区域，有些是每个人都能进入的，但是有人数限制，那么为了限制人数，就会在门口放置几把钥匙，拿到钥匙就进去，当钥匙拿完以后，其他的人就进不去了。这也是为什么会阻塞到后来的程序运行。</p>
+</section>
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <span class="tag-code">node</span>
+
+      </div>
+    
+    <div class="money-like">
+      <div class="reward-btn">
+        赏
+        <span class="money-code">
+          <span class="alipay-code">
+            <div class="code-image"></div>
+            <b>使用支付宝打赏</b>
+          </span>
+          <span class="wechat-code">
+            <div class="code-image"></div>
+            <b>使用微信打赏</b>
+          </span>
+        </span>
+      </div>
+      <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+    </div>
+    <div class="qrcode">
+      <canvas id="share-qrcode"></canvas>
+      <p class="notice">扫描二维码，分享此文章</p>
+    </div>
+    <div id="comments"></div>
+  </article>
+</main>
+
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2017/07/27/day5/';
+    $('#article-banner').geopattern(url)
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://yanm1ng.cn/error-img.png') 
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "Pochodaydayup";
+    if (gitmentConfig != "undefined") {
+      var gitment = new Gitment({
+        owner: "Pochodaydayup",
+        repo: "Pochodaydayup.github.io",
+        oauth: {
+          client_id: "9ee53d627006bebc15a9",
+          client_secret: "aacd2612b0fc3d86833381e668cdcbe992efe906"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2017 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/Pochodaydayup">Pocho</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine == 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
