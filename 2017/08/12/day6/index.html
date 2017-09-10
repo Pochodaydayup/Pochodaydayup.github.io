@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Pocho&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  <title>
+    
+      Day6 meta标签学习 | Pocho
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+  <script src="/js/gitment.js"></script>
+</head>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Pocho</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Day6 meta标签学习</h2>
+  <p class="post-date">2017-08-12</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body">
+  <article class="post-article">
+    <section class="markdown-content"><p>HSL: 即色相、饱和度、亮度，</p>
+<p>取消跨域限制，打开chrome的方法 ： –args –disable-web-security –user-data-dir     </p>
+<h2 id="meta标签学习"><a href="#meta标签学习" class="headerlink" title="meta标签学习"></a>meta标签学习</h2><p>meta标签的定义： 描述一个HTML网页文档的属性，在页面中，常用于定义页面的数据，关键字，最后修改日期，和其他的数据，这些数据将服务于浏览器（如何布局或重载页面，搜索引擎和其他网络服务    ），是文档的最基本的<code>元数据</code></p>
+<p>那么<code>元数据</code>是干什么的，具体来说，是描述数据的数据，比如，你在街上看到了一位美女，回去以后想跟朋友分享，但是你只跟朋友说看到了一位美女可不行，朋友怎么知道你说的是什么，你要具体说明，身高，相貌，穿的什么衣服，这样朋友就可以小小的意淫一下啦。</p>
+<p>上面的例子中的身高体重等等，就是<code>元数据</code>，有点像你的个人信息表，包括姓名，性别，民族等等。。</p>
+<p>对于网页来说，metadata就是通过一些信息来描述一下当前的网页，以便浏览器和搜索引擎可以通过这些描述信息来知道如何去解析网页数据。</p>
+<p>meta标签共有两层属性，分别是http-equiv和name属性</p>
+<p>name属性主要用于描述网页，比如网页的关键字，叙述等，与之对应的是属性是content，content内的内容是对name属性的具体描述，便于搜索引擎抓取。</p>
+<p>name属性共有一下几种参数：</p>
+<ol>
+<li>keywords（关键字）</li>
+</ol>
+<p>用于告诉搜索引擎，你的网页的关键字。</p>
+<p>比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=<span class="string">"keywords"</span> content=<span class="string">"周鹏程，博客，Pocho，前端"</span>&gt;</div></pre></td></tr></table></figure>
+<ol>
+<li>description（网站的描述）</li>
+</ol>
+<p>用于搜索引擎，你的网站的主要内容：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=<span class="string">"description"</span> content=<span class="string">"转行做前端，原来是学物流的，现在是前端工程师"</span>&gt;</div></pre></td></tr></table></figure>
+<ol>
+<li>author（作者）</li>
+</ol>
+<p>标注网页的作者</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=<span class="string">"author"</span> content=<span class="string">"zhoupengcheng, pocho"</span></div></pre></td></tr></table></figure>
+<ol>
+<li>viewport（移动端的窗口）</li>
+</ol>
+<p>这个属性常用于设计移动端的网页，在bootstrap和AmazeUI等框架都使用过</p>
+<p><code>viewport</code>能优化移动浏览器的显示，如果不是响应式网站，不要使用<code>initial-scale</code>或者禁用缩放。</p>
+<p>大部分4.7-5寸的viewport的宽设为360px；</p>
+<p>5寸的设备为400px；</p>
+<p>ip6设为375px，ip6plus设为414px。</p>
+<p>比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=<span class="string">"viewport"</span> content=<span class="string">"width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"</span>&gt;</div></pre></td></tr></table></figure>
+<ol>
+<li>robots（定义搜索引擎爬虫的索引方式）</li>
+</ol>
+<p>content参数有all，none，index，noindex，follow，nofollow，默认是all。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=<span class="string">"robots"</span> content=<span class="string">"none"</span>&gt;</div></pre></td></tr></table></figure>
+<p>具体参数为：</p>
+<p>None: 搜索引擎将忽略此网页，等价于noindex和nofollow。</p>
+<p>noindex：搜索引擎不索引此页。</p>
+<p>nofollow：搜索引擎不继续通过此网页的链接索引其他的网页。</p>
+<p>all：搜索引擎将索引此网页与在网页中的链接，等价于index，follow。</p>
+<p>index：搜索引擎索引此页。</p>
+<p>follow： 搜索引擎通过此网页的链接索引其他的网页。</p>
+<ol>
+<li>generator （网页制作软件）</li>
+</ol>
+<p>用于标明网页是用什么软件写的</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=<span class="string">"generator"</span> content=<span class="string">"VS code"</span>&gt;</div></pre></td></tr></table></figure>
+<ol>
+<li>copyright （版权）</li>
+</ol>
+<p>用于标注版权信息</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=<span class="string">"copyright"</span> content=<span class="string">"zpc"</span>&gt;</div></pre></td></tr></table></figure>
+<ol>
+<li>revisit-after（搜索引擎爬虫重访时间）</li>
+</ol>
+<p>减轻爬虫最服务器的压力，设置一个爬虫的重访时间。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"revisit-after"</span> <span class="attr">content</span>=<span class="string">"7 days"</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="http-equiv属性"><a href="#http-equiv属性" class="headerlink" title="http-equiv属性"></a>http-equiv属性</h3><p>按照自己的理解，就是相当于HTTP作用，我们知道，http报文分为起始行，首部，主体，那么<code>http-equiv</code>能定义http的参数。</p>
+<p>语法格式是：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"参数"</span> <span class="attr">content</span>=<span class="string">"具体的描述"</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><code>Content-Type</code>（设定网页的字符集，推荐用HTML5的方式）</p>
+   <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Content-Type"</span> <span class="attr">content</span>=<span class="string">"text/html;charset=utf-8"</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><code>X-UA-Compatible</code> (浏览器采取何种版本渲染当前页面)</p>
+<p>   用于告知浏览器以何种版本来渲染页面</p>
+   <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"IE=edge,chrome=1"</span>&gt;</span>// 指定IE和chrome使用最新的版本来渲染页面</div></pre></td></tr></table></figure>
+<p> <code>Cache-control</code>(指定请求和响应遵循的缓存机制)</p>
+<p>   用法1：</p>
+<p>   指导浏览器如何缓存某个响应以及缓存多长时间</p>
+<p>   <img src="https://ws2.sinaimg.cn/large/006tNc79gy1fjeh5fek8sj30kr09m3z7.jpg" alt=""></p>
+<p>比如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"cache-control"</span> <span class="attr">content</span>=<span class="string">"no-cache"</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>no-cache: 先发送请求，与服务器确认该资源是否被更改，如果未被更改，则使用缓存。<br>no-store: 不允许缓存，每次都要去服务器上，下载完整的响应。（安全措施）<br>public : 缓存所有响应，但并非必须。因为max-age也可以做到相同效果<br>private : 只为单个用户缓存，因此不允许任何中继进行缓存。（比如说CDN就不允许缓存private的响应）<br>maxage : 表示当前请求开始，该响应在多久内能被缓存和重用，而不去服务器重新请求。例如：max-age=60表示响应可以再缓存和重用 60 秒。</p>
+<p>用法2：</p>
+<p>禁止百度自动转码，用于禁止当前页面在移动端浏览时，被百度自动转码。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Cache-control"</span> <span class="attr">content</span>=<span class="string">"no-siteapp"</span>&gt;</span></div></pre></td></tr></table></figure>
+<ol>
+<li><p>expires(网页到期时间)</p>
+<p>用于设定网页到期时间</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"expires"</span> <span class="attr">content</span>=<span class="string">"Sunday 26 October 2016 01:00 GMT"</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>refresh(自动刷新并指向某页面)</p>
+<p>用于在设定的时间内，自动刷新并调向设定的网址</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"refresh"</span> <span class="attr">content</span>=<span class="string">"2; URL=http://www.baidu.com"</span>&gt;</span>// 2秒后跳的baidu</div></pre></td></tr></table></figure>
+</li>
+<li><p>Set-Cookie（cookie设定）</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Set-Cookie"</span> <span class="attr">content</span>=<span class="string">"name, date"</span>&gt;</span> //格式</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Set-Cookie"</span> <span class="attr">content</span>=<span class="string">"User=Pocho; path=/;expires=Sunday, 10-Jan-16 10:00:00 GMT"</span>&gt;</span> //具体范例</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+</ol>
+</section>
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <span class="tag-code">HTML</span>
+
+  <span class="tag-code">meta</span>
+
+      </div>
+    
+    <div class="money-like">
+      <div class="reward-btn">
+        赏
+        <span class="money-code">
+          <span class="alipay-code">
+            <div class="code-image"></div>
+            <b>使用支付宝打赏</b>
+          </span>
+          <span class="wechat-code">
+            <div class="code-image"></div>
+            <b>使用微信打赏</b>
+          </span>
+        </span>
+      </div>
+      <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+    </div>
+    <div class="qrcode">
+      <canvas id="share-qrcode"></canvas>
+      <p class="notice">扫描二维码，分享此文章</p>
+    </div>
+    <div id="comments"></div>
+  </article>
+</main>
+
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2017/08/12/day6/';
+    $('#article-banner').geopattern(url)
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://yanm1ng.cn/error-img.png') 
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "Pochodaydayup";
+    if (gitmentConfig != "undefined") {
+      var gitment = new Gitment({
+        owner: "Pochodaydayup",
+        repo: "Pochodaydayup.github.io",
+        oauth: {
+          client_id: "9ee53d627006bebc15a9",
+          client_secret: "aacd2612b0fc3d86833381e668cdcbe992efe906"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2017 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/Pochodaydayup">Pocho</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine == 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
