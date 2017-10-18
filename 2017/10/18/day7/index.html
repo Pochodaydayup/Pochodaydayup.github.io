@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Pocho&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  <title>
+    
+      Day7 很杂的学习 | Pocho
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+  <script src="/js/gitment.js"></script>
+</head>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Pocho</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Day7 很杂的学习</h2>
+  <p class="post-date">2017-10-18</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body">
+  <article class="post-article">
+    <section class="markdown-content"><h3 id="HTTP缓存"><a href="#HTTP缓存" class="headerlink" title="HTTP缓存"></a>HTTP缓存</h3><p>使用HTTP缓存会节省流量费用，对于提高性能有帮助。</p>
+<p>如图</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fjfdhhx80ej30fb09lt99.jpg" alt=""></p>
+<p>当服务器返回响应的时候，会发出一个HTTP头，用于描述响应内容的内容类型，长度，缓存指令，验证令牌等，例如在上图的交互中，返回的是一个1024字节的响应，指示客户端最多将资源缓存120秒，并且提供一个Etag（x23dff）， 可以用来响应过期后检查资源是否被修改过。</p>
+<p>客户端再次请求资源的时候，会先检查本地缓存信息并找到之前的响应，如果时间间隔大于120秒或者日期已经过了指定的日期了，那么客户端可以重新发送请求到服务器端：</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fjfdtt464sj30hm087wf0.jpg" alt=""></p>
+<p>这次的请求就包括了<code>If-None-Match</code>头部，内容是ETag的令牌，如果和后台的一样，那么服务器就会发出一个304响应，告诉浏览器缓存中的响应为发生变化，可以再延用120秒，不用再次下载响应，节约了时间和带宽。</p>
+<p>唯一要做的是确保服务器提供必要的ETag令牌。</p>
+<h2 id="ES6-的函数的解构赋值"><a href="#ES6-的函数的解构赋值" class="headerlink" title="ES6 的函数的解构赋值"></a>ES6 的函数的解构赋值</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayHello</span> (<span class="params">&#123; name = <span class="string">'pocho'</span>, lastname=<span class="string">'zhou'</span> &#125; = &#123;&#125;</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">`hello <span class="subst">$&#123;name&#125;</span>, <span class="subst">$&#123;lastname&#125;</span>`</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>此时可以添加一个默认的参数值来填充调用者没有传递或者忘记传递的参数值，<code>={}</code>表示的是此参数解构的对象是一个<code>{}</code>, 以防止调用者忘记传值，或者传递了一个错误的类型（大多数情况下为后者）</p>
+<p>注意这是跟下面的情况是不一样的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayHello</span> (<span class="params">&#123; name, lastname &#125; = &#123; name: <span class="number">0</span>, lastname: <span class="number">0</span>&#125;</span>) </span>&#123;</div><div class="line">	<span class="comment">// 这里的代码是为函数`sayHello`的参数指定默认值， 而不是为变量name， lastname 指定默认值， 后面的=&#123;name: 0, lastname: 0&#125; 是当函数没有传递参数的时候，默认的解构赋值</span></div><div class="line">  <span class="built_in">console</span>.log([name, lastname])</div><div class="line">&#125;</div><div class="line"></div><div class="line">sayHello() <span class="comment">// =&gt; [0, 0]</span></div><div class="line">sayHello(&#123;&#125;) <span class="comment">// =&gt; [undefined, undefined]</span></div><div class="line">sayHello(&#123;<span class="attr">name</span>: <span class="number">3</span>&#125;) <span class="comment">//=&gt; [3, undefined]</span></div></pre></td></tr></table></figure>
+<h2 id="学习TypeScript"><a href="#学习TypeScript" class="headerlink" title="学习TypeScript"></a>学习TypeScript</h2><p>typescript中的类：</p>
+<p>类的组成可以分为两个部分：<strong>实例部分</strong>，<strong>静态部分</strong></p>
+<p>比如：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Point &#123;</div><div class="line">  <span class="keyword">static</span> name = <span class="string">'pocho'</span> <span class="comment">// 类的静态部分，需通过Point.name取到</span></div><div class="line">  age: <span class="built_in">string</span> <span class="comment">// 类的实例部分，需通过new Point() 后使用</span></div><div class="line">  <span class="keyword">constructor</span> (<span class="params">age: <span class="built_in">string</span></span>) &#123; <span class="comment">// constructor是类的静态部分</span></div><div class="line">      <span class="keyword">this</span>.age = age</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>类定义会创建两个东西，<strong>类的实例类型</strong>和<strong>一个构造函数</strong>。因为类可以创造出类型，所以你可以在允许使用接口的地方使用类：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Point &#123; <span class="comment">// 代表的是**类的实例**类型</span></div><div class="line">  x: <span class="built_in">number</span>;</div><div class="line">  y: <span class="built_in">number</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">interface</span> Point3d <span class="keyword">extends</span> Point &#123;</div><div class="line">    z: <span class="built_in">number</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> point3d: Point3d = &#123;x: <span class="number">1</span>, y:<span class="number">2</span>, z:<span class="number">3</span>&#125;</div></pre></td></tr></table></figure>
+<p>再如以下的例子：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Greeter &#123;</div><div class="line">  <span class="keyword">static</span> standardGreeting = <span class="string">'hello world'</span></div><div class="line">  greeting: <span class="built_in">string</span></div><div class="line">  greet() &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.greeting) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="string">'hello'</span> + <span class="keyword">this</span>.greeting</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">return</span> Greeter.standardGreeting</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> greeter1: Greeter = <span class="keyword">new</span> Greeter() <span class="comment">// 这里的Greeter是指的是类的实例的类型</span></div><div class="line"><span class="built_in">console</span>.log(greeter1.greet())</div><div class="line"></div><div class="line"><span class="keyword">let</span> greeterMaker: <span class="keyword">typeof</span> Greeter = Greeter <span class="comment">// 这里的typeof Greeter是取得构造函数的类型</span></div><div class="line"><span class="built_in">console</span>.log(greeterMaker.standardGreeting)</div><div class="line"><span class="keyword">let</span> greeter2: Greeter = <span class="keyword">new</span> greeterMaker()</div><div class="line"><span class="built_in">console</span>.log(greeter2.greet())</div></pre></td></tr></table></figure>
+<p>在<code>TypeScript</code>中，使用<code>interface</code>来定义对象的类型。</p>
+<p>在面向对象语言中，接口<code>(Interface)</code>是对象行为的抽象，而具体的如何行动需要由类class 去实现。</p>
+<p>typescript中的接口是一个非常灵活的概念，除了可用于对<strong>类的一部分行为进行抽象</strong>以外，也常用于<strong>对对象行为的描述</strong>。</p>
+<p>typecript的核心原则之一是对数据具有的结构进行检查，采用”鸭式辨型法”来检查成员结构是否合法。</p>
+<p>主要要看的是类实现接口，用接口去强制一个类实现某个契约：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">interface Itest &#123;</div><div class="line">  webName: string</div><div class="line">  age: number</div><div class="line">&#125;</div><div class="line"></div><div class="line">class Test implements Itest &#123;</div><div class="line">    webName: 'pocho';</div><div class="line">  	age: 2;</div><div class="line">  constructor (webName: 'pocho', age: 2) &#123;</div><div class="line">    this.webName = webName</div><div class="line">    this.age = age</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">// 其实还可以这样写, 和上面的相等</div><div class="line">class Test implements Itest &#123;</div><div class="line">    constructor (public webName: 'pocho', public age: 2) &#123;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接口的定义是指：接口指规定约束，并没有具体实现。如果类实现某一接口，那么可以实现接口的成员，在上面的代码中，将webName赋值为字符串pocho。又因为接口是描述数据结构，所以实现接口的类没必要实现接口的成员：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">interface</span> Ttest &#123;</div><div class="line">  webName: <span class="built_in">string</span>;</div><div class="line">  show (address: <span class="built_in">string</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">class</span> Antzone <span class="keyword">implements</span> Ttest &#123;</div><div class="line">    webName;</div><div class="line">  	age: <span class="number">4</span>;</div><div class="line">  	show (address: <span class="built_in">string</span>) &#123;</div><div class="line">        <span class="built_in">console</span>.log(address)</div><div class="line">    &#125;</div><div class="line">  <span class="keyword">constructor</span> (<span class="params"></span>) &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="关于react和vue的组件化的一些思考"><a href="#关于react和vue的组件化的一些思考" class="headerlink" title="关于react和vue的组件化的一些思考"></a>关于react和vue的组件化的一些思考</h2><p>在工作中使用vue比较多，也写了很多关于vue的组件，在学习react的时候，发现react的组件跟vue的组件有很多相似之处。</p>
+<p>react的组件如果按照推荐的写法，是将组件分的比较的细的，组件可以分为container组件和domb组件，domb组件主要表示渲染，是通过props来传递数据，把一些比如ajax操作都放在container组件里。</p>
+<p>react的container组件举个例子来说如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">import React, &#123; Component &#125; from &apos;react&apos;</div><div class="line">class Layout extends Component &#123;</div><div class="line">    render () &#123;</div><div class="line">        return (</div><div class="line">        	&lt;div className=&quot;sidebar&quot;&gt;</div><div class="line">          		&#123;this.props.children[0]&#125;</div><div class="line">          	&lt;/div&gt;</div><div class="line">          	&lt;div&gt;</div><div class="line">          		&#123;this.props.children[1]&#125;</div><div class="line">          	&lt;/div&gt;</div><div class="line">        )</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>react里面还有一种叫高阶组件的东西，主要是一种函数，能够通过不同的参数，展现出不同的组件。</p>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">// 定义一个高阶组件</div><div class="line"></div><div class="line">function withLoadingSpinner(WrapperComponent) &#123;</div><div class="line">  return function EnhancedComponent(&#123; isLoading, ...props &#125;) &#123;// 这里是使用了es6的解构赋值。</div><div class="line">    if (!isLoading) &#123;</div><div class="line">      return &lt;WrapperComponent &#123; ...props &#125; /&gt;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return &lt;LoadingSpinner /&gt;;</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 使用</div><div class="line"></div><div class="line">const ListItemsWithLoadingIndicator = withLoadingSpinner(ListItems);</div><div class="line"></div><div class="line">&lt;ListItemsWithLoadingIndicator</div><div class="line">  isLoading=&#123;props.isLoading&#125;</div><div class="line">  list=&#123;props.list&#125;</div><div class="line">/&gt;</div><div class="line"></div><div class="line">// 在比如</div><div class="line">import React, &#123; Component &#125; from &apos;react&apos;</div><div class="line"></div><div class="line">export default (WrappedComponent, name) =&gt; &#123;</div><div class="line">  class NewComponent extends Component &#123;</div><div class="line">    constructor () &#123;</div><div class="line">      super()</div><div class="line">      this.state = &#123; data: null &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    componentWillMount () &#123;</div><div class="line">      ajax.get(&apos;/data/&apos; + name, (data) =&gt; &#123;</div><div class="line">        this.setState(&#123; data &#125;)</div><div class="line">      &#125;)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    render () &#123;</div><div class="line">      return &lt;WrappedComponent data=&#123;this.state.data&#125; /&gt;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  return NewComponent</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从上面可以看出，高阶组件（HOC）其实返回的是一个container组件加一个domb组件，传进去的参数就是一个domb组件，然后返回的container组件里进行一些比如ajax操作。另外还可以给高阶组件函数传入name。</p>
+<h2 id="redux学习"><a href="#redux学习" class="headerlink" title="redux学习"></a>redux学习</h2><p>redux的api有createStore, getState, dispatch, reducer等。</p>
+<p>其中createStore的表现方式是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createStore</span> (<span class="params">reducer, state</span>) </span>&#123;</div><div class="line">  	<span class="keyword">const</span> listeners = []</div><div class="line">    <span class="keyword">const</span> subscribe = <span class="function">(<span class="params">listener</span>) =&gt;</span> &#123;</div><div class="line">        listeners.push(listener)</div><div class="line">    &#125;</div><div class="line">	<span class="keyword">const</span> getState = <span class="function"><span class="params">()</span> =&gt;</span> state</div><div class="line">    <span class="keyword">const</span> dispatch = <span class="function">(<span class="params">action</span>) =&gt;</span> &#123;</div><div class="line">		state = reducer(state, action)</div><div class="line">      	listeners.forEach(<span class="function"><span class="params">listener</span> =&gt;</span> &#123;</div><div class="line">            listener()</div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> &#123; getState, dispatch &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="vue-cli的学习"><a href="#vue-cli的学习" class="headerlink" title="vue-cli的学习"></a>vue-cli的学习</h2><h3 id="cross-env"><a href="#cross-env" class="headerlink" title="cross-env"></a>cross-env</h3><p>cross-env 是专门针对于windows环境来说的。一般来说，在新建一个项目的时候，需要在<code>package.json</code>文件中的<code>script</code>标签下配置一系列的命令：</p>
+<p>比如：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">"scripts": &#123;</div><div class="line">    "clear": "rm -rf build&amp;&amp; mkdir build",</div><div class="line">    "start": "npm run clear&amp;&amp; NODE_ENV=development webpack-dev-server --host 0.0.0.0 --devtool eval --progress --color --profile",</div><div class="line">    "deploy": "npm run pre&amp;&amp; npm run clear&amp;&amp; NODE_ENV=production webpack -p --progress"</div><div class="line">  &#125;,</div></pre></td></tr></table></figure>
+<p>注意上面的<code>&amp;&amp;</code>符号，在<code>windows</code>下使用<code>NODE_ENV=development</code> 会报错，因为windows不支持这种写法，需要使用到<code>cross-env</code>这个包，安装cross-env:<code>npm install cross-env --save-dev</code>，在<code>NODE_ENV=xxxxxxx</code>前面添加<code>cross-env</code>就可以了。</p>
+</section>
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <span class="tag-code">vue</span>
+
+  <span class="tag-code">typescript</span>
+
+  <span class="tag-code">http</span>
+
+  <span class="tag-code">react</span>
+
+      </div>
+    
+    <div class="money-like">
+      <div class="reward-btn">
+        赏
+        <span class="money-code">
+          <span class="alipay-code">
+            <div class="code-image"></div>
+            <b>使用支付宝打赏</b>
+          </span>
+          <span class="wechat-code">
+            <div class="code-image"></div>
+            <b>使用微信打赏</b>
+          </span>
+        </span>
+      </div>
+      <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+    </div>
+    <div class="qrcode">
+      <canvas id="share-qrcode"></canvas>
+      <p class="notice">扫描二维码，分享此文章</p>
+    </div>
+    <div id="comments"></div>
+  </article>
+</main>
+
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2017/10/18/day7/';
+    $('#article-banner').geopattern(url)
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://yanm1ng.cn/error-img.png') 
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "Pochodaydayup";
+    if (gitmentConfig != "undefined") {
+      var gitment = new Gitment({
+        owner: "Pochodaydayup",
+        repo: "Pochodaydayup.github.io",
+        oauth: {
+          client_id: "9ee53d627006bebc15a9",
+          client_secret: "aacd2612b0fc3d86833381e668cdcbe992efe906"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2017 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/Pochodaydayup">Pocho</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine == 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
