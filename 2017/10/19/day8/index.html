@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Pocho&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  <title>
+    
+      Day8 深入浅出webpack中的那些路径 | Pocho
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+  <script src="/js/gitment.js"></script>
+</head>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Pocho</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Day8 深入浅出webpack中的那些路径</h2>
+  <p class="post-date">2017-10-19</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body">
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="深入浅出webpack中的那些路径"><a href="#深入浅出webpack中的那些路径" class="headerlink" title="深入浅出webpack中的那些路径"></a>深入浅出webpack中的那些路径</h1><p>在webpack里有很多关于路径参数的配置，在学习vue-cli的配置时，如果不知道为什么要这么配置，等到自己配置的时候，就会很容易出错。</p>
+<h2 id="context"><a href="#context" class="headerlink" title="context"></a>context</h2><p><code>context</code>是webpack编译的基础目录，入口起点（entry）会根据此目录来查找。</p>
+<p>其默认值为当前目录，即<code>package.json</code>所在的目录，下面是webpack里的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.set(<span class="string">'context'</span>, process.cwd())</div></pre></td></tr></table></figure>
+<p>process.cwd()即webpack运行所在的目录（等同package.json所在目录）</p>
+<p><code>context</code>应设置为绝对路径，假如入口起点为<code>src/main.js</code>，则可以配置：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  <span class="attr">context</span>: path.resolve(<span class="string">'./src'</span>),</div><div class="line">  <span class="attr">entry</span>: <span class="string">'./main.js'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>由于上面的context设置为绝对路径为src所在的路径，所以entry的目录就是相对于src来说的，所以，应将entry配置为当前目录。</p>
+<p>context 有什么实际作用？官方文档的解释是<strong>使得你的配置独立于工程目录</strong> 「This makes your configuration independent from CWD (current working directory)」。怎么理解？举个例子，在分离开发生产配置文件时候，一般把 webpack.config 放到 build 文件夹下，此时 entry 却不用考虑相对于 build 目录来配置，仍然要相对于 context 来配置，这也就是所谓的独立于工程目录。</p>
+<h2 id="output"><a href="#output" class="headerlink" title="output"></a>output</h2><h3 id="output-path"><a href="#output-path" class="headerlink" title="output.path"></a>output.path</h3><p><code>output.path</code>是打包文件输出的目录，建议配置为绝对路径（配置为相对路径不会报错），    其默认值和context的默认值一样，都是process.cwd()。</p>
+<p>除了常规的配置方式外，还可以在path中使用<code>[hash]</code>模板，比如配置：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">output： &#123;</div><div class="line">  <span class="attr">path</span>: path.resolve(<span class="string">'./dist/[hash:8]/'</span>),</div><div class="line">  <span class="attr">filename</span>: <span class="string">'[name].js'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里的 hash 值是编译过程的 hash，如果被打包进来的内容改变了，那么 hash 值也会发生改变。这个可以用于版本回滚。也可以配置为path.resolve(<code>./dist/${Date.now()}/</code>)方便做持续集成等。</p>
+<h3 id="output-publicPath"><a href="#output-publicPath" class="headerlink" title="output.publicPath"></a>output.publicPath</h3><p>注意注意，这时理解起来可能有困难的地方。</p>
+<p><code>publicPath</code>可以理解为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">静态资源的最终访问路径 = output.publicPath + 资源loader或插件等配置路径</div></pre></td></tr></table></figure>
+<p><code>publicPath</code>的默认值为空字符串。</p>
+<p><code>publicPath</code>设置为相对路径的时候，其实是相对于<code>index.html</code>的路径。比如我将<code>publicPath</code>设置成<code>./dist/</code>, js文件名为<code>bundle.js</code>，那么按照上面公式，最终访问到的JS的路径为<code>./dist/bundle.js</code>。这个路径同时也是index.html引用JS的路径，所以index.html的位置就决定了publicPath里面的位置，比如index.html在A文件夹下，而发布的路径不想放到A文件夹里，而是想和A文件夹同级，那么就应配置为publicPath :”../dist/“，这就是相对于index.html的路径来讲，bundle.js在上一层的dist文件夹里。</p>
+<p>publicPath 设为相对于协议url（//）或http地址（<a href="http://），比如publicPath:&#39;http://wwww.qinshenxue.com/static/&#39;，开发环境当然是不能这么干，使用这个的场景是将资源托管到CDN，比如公司的静态资源服务器等。" target="_blank" rel="external">http://），比如publicPath:&#39;http://wwww.qinshenxue.com/static/&#39;，开发环境当然是不能这么干，使用这个的场景是将资源托管到CDN，比如公司的静态资源服务器等。</a></p>
+<p>另外<code>publicPath</code>应该以<code>/</code>结尾，同时其他的<code>loader</code>和插件的配置不能以<code>/</code>开头。</p>
+<p>我们再以<code>vue-cli</code>中的webpack配置为例</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">output: &#123;</div><div class="line">    <span class="attr">path</span>: config.build.assetsRoot,</div><div class="line">    <span class="attr">filename</span>: <span class="string">'[name].js'</span>,</div><div class="line">    <span class="attr">publicPath</span>: process.env.NODE_ENV === <span class="string">'production'</span></div><div class="line">      ? config.build.assetsPublicPath <span class="comment">// 这里代表的是''</span></div><div class="line">      : config.dev.assetsPublicPath <span class="comment">// 这里代表的是'/'</span></div><div class="line">  &#125;,</div></pre></td></tr></table></figure>
+<h3 id="webpack-dev-server中的publicPath"><a href="#webpack-dev-server中的publicPath" class="headerlink" title="webpack-dev-server中的publicPath"></a>webpack-dev-server中的publicPath</h3><p>首先这里的webpack-dev-server中的publicPath用于开发环境的，因此不会出现配置 http 地址的情况，那这两者到底有啥区别呢？</p>
+<p>首先webpack-dev-server打包的内容是放在内存中的，通过express匹配请求路径，然后读取对应的资源输出。这些资源对外的根目录就是<code>publicPath</code>,可以理解为和 output.path 的功能一样，将所有资源放在此目录下，在浏览器可以直接访问此目录下的资源。</p>
+<p>但是这个路径只是为了提供浏览器访问打包资源（在内存中）的功能，webpack loader和插件仍是相对于<code>output.publicPath</code>,比如css里面的图片最终的路径仍然是<code>/static/img/xxx.png</code>（<code>output.publicPath</code>设置为<code>/static/</code>），如果你将webpack-dev-server里的<code>publicPath</code>设置为<code>/web/</code>的话，那么index.html里引入js的路径就是<code>/web/bundle.js</code>。</p>
+<p>说明下为什么<code>vue-cli</code>中为什么要这么写，当环境为生产环境时，<code>publicPath</code>为空，则这样不论打包后的<code>dist</code>目录放在那个文件夹里，都能够获取到正确的路径。</p>
+<h3 id="html-webpack-plugin"><a href="#html-webpack-plugin" class="headerlink" title="html-webpack-plugin"></a>html-webpack-plugin</h3><p>这个插件是自动生成html模板，并且将打包好的js插入到html中。</p>
+<p>这个插件几处配置是受路径影响的:</p>
+<h4 id="template"><a href="#template" class="headerlink" title="template"></a>template</h4><p><code>template</code>的路径是相对于<code>output.context</code>，<code>output.context</code>的默认值是<code>/</code>，所以<code>template</code>的路径是相对于<code>/</code>，这也解释为什么在vue-cli里，<code>template</code>的值设置为<code>index.html</code>，因为在<code>package.json</code>所在的目录，有一个<code>index.html</code>模板。</p>
+<h4 id="filename"><a href="#filename" class="headerlink" title="filename"></a>filename</h4><p><code>filename</code>的路径是相对于<code>output.path</code>，在vue-cli里production的output被设置为在<code>dist</code>目录下，所以生成的html在dist目录下。</p>
+<p>但如果是在<code>webpack-dev-server</code>中，<code>filename</code>则是相对于<code>publicPath</code>.</p>
+<p>若 webpack-dev-server 中的 publicPath 和 ouput.publicPath 不一致，在这种配置下使用html-webpack-plugin是有如下问题：</p>
+<ul>
+<li>自动引用的路径仍然以 ouput.publicPath 为准，和 webpack-dev-server 提供的资源访问路径不一致，从而不能正常访问；</li>
+<li>浏览 index.html 需要加上 webpack-dev-server 配置的 publicPath 才能访问（<a href="http://localhost:8282/web/）" target="_blank" rel="external">http://localhost:8282/web/）</a></li>
+</ul>
+<p>这两个问题也反推出了最方便的配置为：</p>
+<ul>
+<li>ouput.publicPath 和 webpack-dev-server 的publicPath 均配置为’/‘，vue-cli 就是这种配置</li>
+<li>template 放在根目录，html-webpack-plugin 不用修改参数的路径，filename 采用默认值。</li>
+</ul>
+</section>
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <span class="tag-code">webpack</span>
+
+      </div>
+    
+    <div class="money-like">
+      <div class="reward-btn">
+        赏
+        <span class="money-code">
+          <span class="alipay-code">
+            <div class="code-image"></div>
+            <b>使用支付宝打赏</b>
+          </span>
+          <span class="wechat-code">
+            <div class="code-image"></div>
+            <b>使用微信打赏</b>
+          </span>
+        </span>
+      </div>
+      <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+    </div>
+    <div class="qrcode">
+      <canvas id="share-qrcode"></canvas>
+      <p class="notice">扫描二维码，分享此文章</p>
+    </div>
+    <div id="comments"></div>
+  </article>
+</main>
+
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2017/10/19/day8/';
+    $('#article-banner').geopattern(url)
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://yanm1ng.cn/error-img.png') 
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "Pochodaydayup";
+    if (gitmentConfig != "undefined") {
+      var gitment = new Gitment({
+        owner: "Pochodaydayup",
+        repo: "Pochodaydayup.github.io",
+        oauth: {
+          client_id: "9ee53d627006bebc15a9",
+          client_secret: "aacd2612b0fc3d86833381e668cdcbe992efe906"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2017 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/Pochodaydayup">Pocho</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine == 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
