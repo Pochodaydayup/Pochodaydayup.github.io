@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Pocho&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  <title>
+    
+      Day9 webpack大法好之代码分割 | Pocho
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+  <script src="/js/gitment.js"></script>
+</head>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Pocho</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Day9 webpack大法好之代码分割</h2>
+  <p class="post-date">2017-10-19</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body">
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="webpack大法好之代码分割"><a href="#webpack大法好之代码分割" class="headerlink" title="webpack大法好之代码分割"></a>webpack大法好之代码分割</h1><h2 id="代码分割（code-splitting）是什么以及为什么要代码分割"><a href="#代码分割（code-splitting）是什么以及为什么要代码分割" class="headerlink" title="代码分割（code splitting）是什么以及为什么要代码分割"></a>代码分割（code splitting）是什么以及为什么要代码分割</h2><p>​    其实在远古时代，js代码文件就是一行一行的写在html里的，然后通过一个一个的http请求去获得文件，但是现在有了webpack之后，它会把整个js文件打包成一个单独的文件，从而减少http请求。但是如果这个打包后的JS文件体积很大，那就得不偿失了。</p>
+<p>​    这时，我们可以将代码分成一块一块的，在要用到的时候再去加载请求它；还可以利用浏览器的缓存，下次再用到它的话，直接从浏览器的缓存中加载，这样岂不是快到美滋滋？</p>
+<h2 id="代码分割怎样分"><a href="#代码分割怎样分" class="headerlink" title="代码分割怎样分"></a>代码分割怎样分</h2><p>主要有两种形式的代码分割：</p>
+<ul>
+<li><a href="http://link.zhihu.com/?target=https%3A//webpack.js.org/guides/code-splitting/%23resource-splitting-for-caching-and-parallel-loads" target="_blank" rel="external">分离业务代码和第三方库**</a>（ vendor ）</li>
+<li><a href="http://link.zhihu.com/?target=https%3A//webpack.js.org/guides/code-splitting/%23resource-splitting-for-caching-and-parallel-loads" target="_blank" rel="external">按需加载**</a>（利用 <a href="http://link.zhihu.com/?target=https%3A//github.com/tc39/proposal-dynamic-import" target="_blank" rel="external">import()**</a> 语法）</li>
+</ul>
+<p>之所以把业务代码和第三方库代码分离出来，是因为产品经理的需求是源源不断的，因此业务的代码更新频率大，相反第三方库代码更新迭代相对较慢而且可以锁版本，可以利用浏览器的缓存来加载这些第三方库。</p>
+<p>按需加载的场景，比如说『访问某个路由的时候再去加载对应的组件』，用户不一定会访问到所有的路由，所以没有必要把所有的路由对应的组件都先开始加载完，更典型的例子是「某些用户他们的权限只能访问某些页面」，所以没必要把他们没权限访问的页面的代码也加载。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>加入你的项目里用到了vue， axios等，并且你的<code>webpack.config.js</code>里面只有一个chunk也就是app.js:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">module.exports = &#123;</div><div class="line">	entry: &#123;</div><div class="line">      app: './src/main.js // 这里叫entry chunk</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>打包完成的图如下：</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fknn562itfj30rj0fomyc.jpg" alt=""></p>
+<p>可以看到app.js 包含了我们的第三方库 vue 和 axios ，以及我们的业务代码 src 。</p>
+<p>这样做肯定是不行的，我们要把他们给分开。</p>
+<h2 id="分离Vendor"><a href="#分离Vendor" class="headerlink" title="分离Vendor"></a>分离Vendor</h2><p>最简单的方法是加一个entry：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  <span class="attr">entry</span>: &#123;</div><div class="line">    <span class="attr">app</span>: <span class="string">'./src/main.js'</span>,</div><div class="line">    <span class="attr">vendor</span>: [<span class="string">'vue'</span>, <span class="string">'axios'</span>]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再看下打包：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fknn8vafctj30rf0ekq4i.jpg" alt=""></p>
+<p>可以看出来，我们的vendor的确包含了vue和axios，但是app.js里面也包括了他们。</p>
+<p>其实，这是很正常的事情：每个entry都包含了他自己的依赖，这样才能作为一个入口，独立的跑起来。</p>
+<p>事实上我们想把他们相同的依赖提取出来就好了，如图：</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fknnega9ywj30r80pijtt.jpg" alt=""></p>
+<p>如果想要提取公共模块的话，就需要用到<code>CommonsChunkPlugin</code>这个插件。</p>
+<h2 id="CommonsChunkPlugin"><a href="#CommonsChunkPlugin" class="headerlink" title="CommonsChunkPlugin"></a>CommonsChunkPlugin</h2><p>现在我们修改<code>webpack</code>配置文件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> webpack.optimize.CommonChunkPlugin(&#123;</div><div class="line">    <span class="attr">name</span>: <span class="string">'vendor'</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Webpack 大佬，在所有的 chunk 中，帮我找到依赖2次及以上的模块，然后移到 vendor 这个 chunk 里面，感激不尽。</p>
+</blockquote>
+<ul>
+<li>所有的 chunk（ app.js 和 vendor.js ）中，app.js 和 vendor.js 都引用了 vue 和 axios</li>
+<li>加起来2次，那把他们都移动到 vendor.js 里面。</li>
+<li>最后，app.js 原本包含的 vue 和 axios 都移动到了 vendor.js 。</li>
+</ul>
+<p>最后看看此时的打包：</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fknox0egqyj30rc0fijsu.jpg" alt=""></p>
+<p>可以看到，app.js里面没有包含vue和axios的代码了。</p>
+<p>但是，随着业务的增长，我们不能一直在vendor里面添加依赖，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  <span class="attr">entry</span>: &#123;</div><div class="line">    <span class="attr">app</span>: <span class="string">'./src/main.js'</span>,</div><div class="line">    <span class="attr">vendor</span>: [</div><div class="line">      <span class="string">'vue'</span>,</div><div class="line">      <span class="string">'axios'</span>,</div><div class="line">      <span class="string">'vue-router'</span>,</div><div class="line">      <span class="string">'vuex'</span>,</div><div class="line">      <span class="string">'element-ui'</span></div><div class="line">    ]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>vendor entry 会变成很长很长，更糟糕的是，我们每次引入了新的第三方库，都需要在 vendor 手动增加对应的包名。</p>
+<h2 id="自动化分离vendor"><a href="#自动化分离vendor" class="headerlink" title="自动化分离vendor"></a>自动化分离vendor</h2><p>如果我们想把所有的node_modules目录下所有的.js文件都自动分离到vendor.js，则需要用到minChunks:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">entry: &#123;</div><div class="line">  <span class="comment">// vendor: ['vue', 'axios'] // 删掉</span></div><div class="line">&#125;，</div><div class="line"><span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(&#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'vendor'</span>,</div><div class="line">  <span class="attr">minChunks</span>: <span class="function">(<span class="params">&#123;resource&#125;</span>) =&gt;</span> &#123;</div><div class="line">    resource &amp;&amp; </div><div class="line">    resource.indexOf(<span class="string">'node_modules'</span>) &gt;= <span class="number">0</span> &amp;&amp;</div><div class="line">    resource.match(<span class="regexp">/\.js$/</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Webpack 大佬，如果你看见某些模块是来自 node_modules 目录的，并且名字是 .js 结尾的话，麻烦把他们都移到 vendor chunk 里去，如果 vendor chunk 不存在的话，就创建一个新的。</p>
+</blockquote>
+<ul>
+<li>找到了，vue 和 axios 都来自 node_modules 并且是 JS 文件</li>
+<li>vendor chunk 不存在，那我就创建一个</li>
+<li>把他们俩移动到 vendor chunk</li>
+</ul>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fknphrxg0pj30rb0f8dh8.jpg" alt=""></p>
+<h2 id="Dynamic-Import"><a href="#Dynamic-Import" class="headerlink" title="Dynamic Import"></a>Dynamic Import</h2><p>如果我们想按需加载的话组件的话，只需要改几行代码就好了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// router.js</span></div><div class="line"><span class="keyword">const</span> Emoji = <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: "Emoji" */</span></div><div class="line"><span class="string">'./page/Emoji.vue'</span>)</div><div class="line"></div><div class="line"><span class="keyword">const</span> Photos = <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: "Photos" */</span></div><div class="line"><span class="string">'./pages/Photos.vue'</span>)</div></pre></td></tr></table></figure>
+<p>接下来添加webpack的配置：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">output:&#123;</div><div class="line">  <span class="attr">chunkFilename</span>: <span class="string">'[name].chunk.js'</span>,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果你用了 Babel ，就需要装上这个插件：<a href="http://link.zhihu.com/?target=https%3A//www.npmjs.com/package/babel-plugin-syntax-dynamic-import" target="_blank" rel="external">babel plugin syntax dynamic import**</a> 来解析 import() 语法。修改 .babelrc ：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="string">'plugins'</span>: [<span class="string">'syntax-dynamic-import'</span>] </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再次看看这个时候的打包：</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fknrw3pw1lj30ra0fa0uq.jpg" alt=""></p>
+<p>可以发现，<code>Photos.chunk.js</code>和<code>Emoji.chunk.js</code>确实被分离出来了，但是，却发现他们里面都包含了<code>axios</code>.</p>
+<p>这样可以再优化下，将axios剥离出来，这次就要用到CommonsChunkPlugin的async。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> webpack.optimize.CommonChunkPlugin(&#123;</div><div class="line">    <span class="attr">async</span>: <span class="string">'common-in-lazy'</span>,</div><div class="line">  	<span class="attr">minChunks</span>: <span class="function">(<span class="params">&#123;resource&#125; = &#123;&#125;</span>) =&gt;</span> (</div><div class="line">    	resource &amp;&amp;</div><div class="line">      	resource.includes(<span class="string">'node_modules'</span>) &amp;&amp;</div><div class="line">      	<span class="regexp">/axios/</span>.test(resource)</div><div class="line">    )</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Webpack 大佬，帮我在所有的 async chunk 中，找到来自 node_modules ，并且名字带有 axios 的模块。</p>
+</blockquote>
+<ul>
+<li>所有的 async chunk ，就是 import() 产生的 chunk ，也就是 Emoji.chunk.js 和 Photos.chunk.js</li>
+<li>Emoji.chunk.js 和 Photos.chunk.js 都包含了 axios ，所以把他移动到名叫 common-in-lazy 的 chunk 中</li>
+<li>common-in-lazy chunk 并不存在，那就新建一个吧。</li>
+</ul>
+<p>是时候看一下我们的打包了：</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fkns3y9oxvj30rk0pfju7.jpg" alt=""></p>
+<p>如果足够细心，你会发现：Emoji.chunk.js 和 Photos.chunk.js 都包含了我们自定义的一个组件 MagicBtn 。同理地我们可以用上面的方法把他提取出来，但是如果还有 MagicBtn2 ，MagicBtn3 等等的话，那我们就要写成 /MagicBtn1|MagicBtn2|…/.test(resource) ，很显然没人喜欢这样做。</p>
+<p>所以呢，另一个方法是利用 count ：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> webpack.optimize.CommonWebpackPlugin(&#123;</div><div class="line">  <span class="attr">async</span>: <span class="string">'used-twice'</span>,</div><div class="line">  <span class="attr">minChunks</span>: <span class="function">(<span class="params"><span class="built_in">module</span>, count</span>) =&gt;</span> (</div><div class="line">  	count &gt;= <span class="number">2</span></div><div class="line">  )</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>在所有的 async chunk ( Emoji.chunk.js 和 Photos.chunk.js ) 中找到引用 2 次以上的模块，也就是 MagicBtn 咯，那把他挪到 used-twice chunk 中，如果 used-twice 不存在的话，那就创建一个。</p>
+<p>最后，我们的打包：</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fknsclga4dj30rl0f80un.jpg" alt=""></p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>冷静总结一下：</p>
+<blockquote>
+<p>你的 Code Splitting = <a href="http://link.zhihu.com/?target=https%3A//www.npmjs.com/package/webpack-bundle-analyzer" target="_blank" rel="external">webpack bundle analyzer**</a> + <a href="http://link.zhihu.com/?target=https%3A//webpack.js.org/plugins/commons-chunk-plugin/" target="_blank" rel="external">CommonsChunkPlugin**</a> + 你的分析</p>
+</blockquote>
+</section>
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <span class="tag-code">webpack</span>
+
+      </div>
+    
+    <div class="money-like">
+      <div class="reward-btn">
+        赏
+        <span class="money-code">
+          <span class="alipay-code">
+            <div class="code-image"></div>
+            <b>使用支付宝打赏</b>
+          </span>
+          <span class="wechat-code">
+            <div class="code-image"></div>
+            <b>使用微信打赏</b>
+          </span>
+        </span>
+      </div>
+      <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+    </div>
+    <div class="qrcode">
+      <canvas id="share-qrcode"></canvas>
+      <p class="notice">扫描二维码，分享此文章</p>
+    </div>
+    <div id="comments"></div>
+  </article>
+</main>
+
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2017/10/19/day9/';
+    $('#article-banner').geopattern(url)
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://yanm1ng.cn/error-img.png') 
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "Pochodaydayup";
+    if (gitmentConfig != "undefined") {
+      var gitment = new Gitment({
+        owner: "Pochodaydayup",
+        repo: "Pochodaydayup.github.io",
+        oauth: {
+          client_id: "9ee53d627006bebc15a9",
+          client_secret: "aacd2612b0fc3d86833381e668cdcbe992efe906"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2017 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/Pochodaydayup">Pocho</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine == 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
