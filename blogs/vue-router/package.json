@@ -1,0 +1,19 @@
+{
+  "name": "vue-router",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup --config rollup.config.js",
+    "dev": "nodemon"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "nodemon": "^1.17.5",
+    "rollup": "^0.61.2",
+    "rollup-plugin-babel": "^3.0.5"
+  }
+}
